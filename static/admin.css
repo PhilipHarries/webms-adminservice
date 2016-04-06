@@ -1,0 +1,13 @@
+.invisible { display: none; }
+.visible { display: inline; }
+.album_title { font-size: 1.4em; font-weight: bold; }
+.admin_album_title { font-size: 2em; font-weight: bold; }
+.admin_album_desc { font-size: 1.2em; }
+.admin_album_last_update { font: italic; }
+.admin_album_heading { font-size: 1.5em; }
+
+.table {border: none; display: table; }
+.tr {border: none; display: table-row; }
+.td {border: none; display: table-cell; }
+
+.content_textarea {height: 100px; width: 200px; }

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>index</title>
+    <link href="/static/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/philipispdr.css" rel="stylesheet">
+    <style>.content {padding-top: 80px;}</style>
+  </head>
+
+  <body>
+
+    {%- block topbar -%}
+    <nav class="navbar navbar-default">
+        <div class="container">
+            <div class="navbar-brand">Albums</div>
+            <div class="navbar-collapse"> </div><!--/.nav-collapse -->
+        </div>
+    </nav>
+    {%- endblock -%}
+
+    <div class="container">
+        <div class="content">
+            {% block page_header -%}{% endblock -%}
+            {% block content -%}
+              <div>
+                <ul>
+              {% for album in albums -%}
+                  <li class="album_title"><a href="/slideshow/{{ album.id }}">{{ album.title }}</a></li> <!--<small>{{ album.desc }}</small>-->
+              {% endfor -%}
+                </ul>
+              </div>
+            {% endblock -%}
+        </div>
+    </div>
+<!-- {u'title': u'Chiddingfold Fireworks, November 2009', u'album-last-update': u'1453938493', u'cache-last-update': u'Fri, 04 Mar 2016 11:44:08 GMT', u'uri': u'http://localhost:5433/flickr/api/v1.0/album/Philip_UK/72157624160923934', u'desc': u'', u'id': u'72157624160923934', u'owner_id': u'Philip_UK'} -->
+    {% block js_footer %}{% endblock %}
+  </body>
+</html>

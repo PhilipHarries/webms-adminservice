@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>index</title>
+    <!--    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet"> -->
+    <link href="/static/admin.css" rel="stylesheet">
+    <link href="/static/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/bootstrap-theme.min.css">
+    <script src="/static/jquery.min.js"></script>
+    <script src="/static/bootstrap.min.js"></script>
+
+    <style>.content {padding-top: 80px;}</style>
+  </head>
+
+  <body>
+
+    {%- block topbar -%}
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <h2> <a href="/" class="brand">Admin</a> </h2>
+            </div>
+            <div class="navbar-collapse">
+            </div><!--/.nav-collapse -->
+        </div>
+    </nav>
+    {%- endblock -%}
+
+
+    <div class="container">
+      <div class="content">
+
+
+          {% block page_header %}{% endblock %}
+          {% block content %}
+
+
+         <div class="well">
+            {% if current_user.is_authenticated -%}
+              <!-- <div>{{ current_user.email }} is authenticated</div> -->
+            {% endif -%}
+            {% if message -%}
+                {{ message }}
+            {% endif -%}
+
+
+            <div>
+              <button type="button" class="btn btn-info" data-toggle="modal" data-target="#new-blog-modal">New Post</button>
+            </div>
+         </div>
+
+        <div id="new-blog-modal" class="modal fade well" role="dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title">New Blog Post</h4>
+            </div>
+            <div class="modal-body">
+              <div class="well">
+                <form role="form" method="post" name="new_blog">
+                  {{ new_blog_form.hidden_tag() }}
+                  <fieldset class="form-group">
+                    <label for="id">ID:</label>
+                    <input id="id" type="text" class="form-control" name="id" placeholder="short name for use in URLs" required />
+                  </fieldset>
+                  <fieldset class="form-group">
+                    <label for="title">Title:</label>
+                    <input id="title" type="text" class="form-control" placeholder="title of new blog post" name="title" required />
+                  </fieldset>
+                  <fieldset class="form-group">
+                    <label for="description">Description:</label>
+                    <input id="description" type="text" class="form-control" placeholder="short description of blog" name="description" required />
+                  </fieldset>
+                  <fieldset class="form-group">
+                    <label for="author">Author:</label>
+                    <input id="author" type="text" class="form-control" placeholder="author's name, e.g. Bob Hoskins" name="author" required />
+                  </fieldset>
+                  <fieldset class="form-group">
+                    <label for="tags">Tags:</label>
+                    <input id="tags" type="text" class="form-control" placeholder="blog,fish,goldfish,aquarium care" name="tags" required />
+                  </fieldset>
+                  <fieldset class="form-group">
+                    <label for="content">Content:</label>
+                    <textarea id="content" placeholder="This is your blog post..." class=" form-control span6" name="content" rows="10" required></textarea>
+                  </fieldset>
+                  <fieldset class="form-group">
+                    <label for="created-date">Created date:</label>
+                    <input type="text" id="created-date" name="created-date" value="Now" disabled>
+                  </fieldset>
+                  <fieldset class="form-group">
+                    <label for="updated-date">Last updated date:</label>
+                    <input type="text" id="updated-date" name="updated-date" value="Now" disabled>
+                  </fieldset>
+                  <input id="new_blog_submit" type="submit" value="Submit" name="submit" class="btn btn-primary">
+                </form>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+
+
+                {% for blog in blogs %}
+
+                <div class="well">
+                  <div><h2>{{ blog.title }}</h2></div>
+                  <div><h3>{{ blog.description }}</h3></div>
+                  <div><p>{{ blog.content|truncate(100) }}</p></div>
+                  <div><strong>{{ blog.author }}</strong></div>
+                  <div><em>First posted: {{ blog["created-date"] }}</em></div>
+                  <div><em>Updated: {{ blog["last-update"] }}</em></div>
+                  <div><button type="button" class="btn btn-info" data-toggle="modal" data-target="#update-{{blog.id}}-modal">Update Post</button> <button type="button" class="btn btn-info" data-toggle="modal" data-target="#delete-{{blog.id}}-modal">Delete Post</button></div>
+                  <div id="delete-{{blog.id}}-modal" class="modal fade well" role="dialog">
+                    <div class="modal=content">
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      <h4 class="modal-title">Delete Post</h4>
+                    </div>
+                    <div class="modal-body">
+                      <div class="well"> 
+                        <form class="form-inline" role="form" method="post" name="delete_blog">
+                          {{ delete_blog_form.hidden_tag() }}
+                          <input id="{{blog.id}}" type="hidden" value="{{ blog.id }}" name="id">
+                          <div>Are you sure?</div>
+                          <input id="delete_blog_submit" type="submit" value="Delete Post" name="submit" class="btn btn-primary" >
+                        </form>
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                  <div id="update-{{blog.id}}-modal" class="modal fade well" role="dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Update Blog</h4>
+                      </div>
+                      <div class="modal-body">
+                        <div class="well">
+                          <form class="form-inline" role="form" method="post" name="update_blog">
+                            {{ update_blog_form.hidden_tag() }}
+                            <div>Id:          {{ blog.id }}</div>
+                            <fieldset class="form-group">
+                              <label for="title">Title:</label>
+                              <div><input id="title" type="text" class="form-control" value="{{ blog.title }}" name="title"></div>
+                            </fieldset>
+                            <fieldset class="form-group">
+                              <label for="description">Description:</label>
+                              <input id="description" type="text" value="{{ blog.description }}" name="description">
+                            </fieldset>
+                            <fieldset class="form-group">
+                              <label for="author">Author:</label>
+                              <input id="author" type="text" value="{{ blog.author }}" name="author">
+                            </fieldset>
+                            <div>Tags: <input id="tags" type="text" value="{{ blog.tags }}" name="tags"></div>
+                            <div>Content: <textarea id="content" class="input" name="content" rows="5">{{ blog.content }} </textarea></div>
+                            <div>Created date: {{ blog["created-date"] }}</div>
+                            <div>Last update: {{ blog["last-update"] }}</div>
+                            <input id="{{blog.id}}" type="hidden" value="{{ blog.id }}" name="id">
+                            <input id="update_blog_submit" type="submit" value="Update" name="submit" class="btn btn-primary" >
+                          </form>
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+                  </div>
+
+<!-- <a href="{ url_for('posts.detail', slug=post.slug) }">{ post.title }</a> -->
+<!-- description: 
+author: 
+tags: 
+created-date: 
+uri: 
+content: 
+title: 
+id: 
+last-update-date: 
+-->
+
+                </div>
+                {% endfor %}
+
+
+            {% endblock %}
+        </div>
+    </div>
+    {% block js_footer %}{% endblock %}
+  </body>
+</html>

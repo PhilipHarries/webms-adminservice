@@ -1,0 +1,8 @@
+Flask-script
+PyMongo
+Flask-PyMongo
+requests
+Flask-WTF
+flask-login
+Flask-Security
+Flask-MongoEngine

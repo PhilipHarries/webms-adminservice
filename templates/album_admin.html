@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>index</title>
+    <link href="/static/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/admin.css" rel="stylesheet">
+    <style>.content {padding-top: 80px;}</style>
+  </head>
+
+  <body>
+
+    {%- block topbar -%}
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <h2>
+                    <a href="#">Album Admin</a>
+                </h2>
+            </div>
+            <div class="navbar-collapse">
+            </div><!--/.nav-collapse -->
+        </div>
+    </nav>
+    {%- endblock -%}
+
+    <div class="container">
+        <div class="content">
+            {% block page_header -%}{% endblock -%}
+            <b>{{ message }}</b>
+            {% block content -%}
+                <div class="table">
+                    <div class="tr">
+                        <span class="td admin_album_heading">Title</span>
+                        <span class="td admin_album_heading">Description</span>
+                        <!-- <span class="td admin_album_heading">Last Updated</span> -->
+                        <span class="td admin_album_heading">Cache Last Updated</span>
+                        <span class="td admin_album_heading">Number of photos currently in cache</span>
+<!--                        <span class="td admin_album_heading">Internal Link</span> -->
+<!--                        <span class="td admin_album_heading">Flickr</span> -->
+                        <span class="td admin_album_heading">Owner</span>
+                        <span class="td admin_album_heading"></span>
+                    </div>
+                    {% for album in albums -%}
+                    <div class="tr">
+                            <span class="td admin_album_title"><a href="/album/{{ album.id }}">{{ album.title }}</a></span>
+                            <span class="td admin_album_desc">{{ album.desc }}</span>
+<!--                        <span class="td admin_album_last_update">{{ album["album-last-update"] }}</span> -->
+                            <span class="td admin_album_cache_update">{{ album["cache-last-update"] }}</span>
+                            <span class="td admin_album_num_photos">{{ album.num_photos }}</span>
+<!--                        <span class="td admin_album_uri">{{ album.uri }}</span> -->
+<!--                        <span class="td admin_album_flickr_link">{{ album.flickr_url }}</span> -->
+<!--                        <span class="td admin_album_owner">{{ album.owner_id }}</span> -->
+                            <span class="td admin_album_action">
+                                <form action="" method="post" name="refresh_album">
+                                    <div style="display:none;">
+                                        <input id="owner_id" type="hidden" value="{{ album.owner_id }}" name="owner_id">
+                                    </div>
+                                    <div style="display:none;">
+                                        <input id="album_id" type="hidden" value="{{ album.id }}" name="album_id"/>
+                                    </div>
+                                    {{ album_refresh_form.hidden_tag() }}
+                                    {{ album_refresh_form.refresh }}
+                                </form>
+                            </span>
+                    </div>
+                    {% endfor -%}
+                </div>
+
+            {% endblock %}
+
+        </div>
+    </div>
+    {% block js_footer -%}{% endblock -%}
+  </body>
+</html>

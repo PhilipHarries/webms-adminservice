@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>{{ album.title }}</title>
+    <!-- <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet"> -->
+    <link href="/static/bootstrap.min.css" rel="stylesheet">
+    <style>.content {padding-top: 80px;}</style>
+  </head>
+
+  <body>
+
+    {%- block topbar -%}
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <h2>
+                    <a href="/" class="brand">{{ album.title }}</a> <small>{{ album.desc }}</small>
+                </h2>
+            </div>
+            <div class="navbar-collapse">
+            </div><!--/.nav-collapse -->
+        </div>
+    </nav>
+    {%- endblock -%}
+
+
+    <div class="container">
+        <div class="content">
+            {% block page_header %}{% endblock %}
+            {% block content %}
+              <div><h3>{{ album.desc }}</h3></div>
+                {% for photo in album.photos %}
+                  <div><a href="/image/flickr/{{ album.owner_id }}/{{album.id}}/{{photo.id}}/photo"><img src="/image/flickr/{{ album.owner_id }}/{{album.id}}/{{photo.id}}/thumbnail"></a>{{ photo.title }}</div>
+                {% endfor %}
+
+            {% endblock %}
+        </div>
+    </div>
+    {% block js_footer %}{% endblock %}
+  </body>
+</html>
